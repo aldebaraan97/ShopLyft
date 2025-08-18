@@ -78,5 +78,15 @@ public class CartService {
     public Cart removeItemFromCart(Long userId, Long productId) {
         return updateItemQuantity(userId, productId, 0);
     }
+
+    @Transactional
+    public void clearCart(Long userId) {
+        Cart cart = cartRepository.findByUserId(userId).orElse(null);
+        if (cart != null) {
+            cartItemRepository.deleteAll(cart.getItems());
+            cart.getItems().clear();
+            cartRepository.save(cart);
+        }
+    }
 }
 

@@ -39,4 +39,18 @@ public class UserService {
                 .filter(user -> user.getPassword().equals(password))
                 .orElse(null);
     }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public User updateUser(Long id, String email) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null && email != null) {
+            user.setEmail(email);
+            return userRepository.save(user);
+        }
+        return null;
+    }
 }
