@@ -11,6 +11,8 @@ export default function Main() {
         <p>Your one-stop shop for all your needs!</p>
         <ProductList />
         <Link to="/products">Browse Products</Link>
+        <br />
+        <Link to="/products/new">Add New Product</Link>
       </div>
     </>
   );
