@@ -2,6 +2,9 @@ package com.grosserystore.grosserystore.controller;
 
 import com.grosserystore.grosserystore.entity.Order;
 import com.grosserystore.grosserystore.service.OrderService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
+@Tag(name = "Orders", description = "Order management APIs")
 public class OrderController {
+
     @Autowired
     private OrderService orderService;
 
@@ -40,7 +45,7 @@ public class OrderController {
 
     @PutMapping("/{orderId}/status")
     public ResponseEntity<Order> updateOrderStatus(
-            @PathVariable Long orderId, 
+            @PathVariable Long orderId,
             @RequestParam String status) {
         try {
             Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(status.toUpperCase());

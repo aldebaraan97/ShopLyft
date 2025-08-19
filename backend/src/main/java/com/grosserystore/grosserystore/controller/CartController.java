@@ -3,14 +3,20 @@ package com.grosserystore.grosserystore.controller;
 import com.grosserystore.grosserystore.dto.CartItemRequest;
 import com.grosserystore.grosserystore.entity.Cart;
 import com.grosserystore.grosserystore.service.CartService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
-@CrossOrigin(origins = "*")
+@Tag(name = "Carts", description = "Cart management APIs")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CartController {
+
     @Autowired
     private CartService cartService;
 
@@ -24,6 +30,7 @@ public class CartController {
     }
 
     @PostMapping("/{userId}/items")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Cart> addItem(
             @PathVariable Long userId,
             @RequestBody CartItemRequest request) {
@@ -35,6 +42,7 @@ public class CartController {
     }
 
     @PutMapping("/{userId}/items/{productId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Cart> updateItem(
             @PathVariable Long userId,
             @PathVariable Long productId,
@@ -47,6 +55,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{userId}/items/{productId}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Cart> removeItem(
             @PathVariable Long userId,
             @PathVariable Long productId) {

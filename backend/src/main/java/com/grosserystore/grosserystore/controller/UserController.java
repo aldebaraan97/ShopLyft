@@ -3,14 +3,19 @@ package com.grosserystore.grosserystore.controller;
 import com.grosserystore.grosserystore.dto.UserUpdateRequest;
 import com.grosserystore.grosserystore.entity.User;
 import com.grosserystore.grosserystore.service.UserService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
+@Tag(name = "Users", description = "User management APIs")
 public class UserController {
+
     @Autowired
     private UserService userService;
 

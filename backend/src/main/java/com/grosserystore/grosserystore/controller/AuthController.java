@@ -3,6 +3,9 @@ package com.grosserystore.grosserystore.controller;
 import com.grosserystore.grosserystore.dto.LoginRequest;
 import com.grosserystore.grosserystore.entity.User;
 import com.grosserystore.grosserystore.service.UserService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +14,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
+@Tag(name = "Authentications", description = "Authentication management APIs")
 public class AuthController {
+
     @Autowired
     private UserService userService;
 
