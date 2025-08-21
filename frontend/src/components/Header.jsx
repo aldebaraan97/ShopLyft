@@ -1,41 +1,106 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from '@mui/icons-material/Search';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchBar from './SearchBar.jsx';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function Header() {
-    return (
-        <header className="w-full bg-gray-100 shadow-md p-4 flex flex-col items-center gap-4">
-            {/* Title */}
-            <h1 className="text-2xl font-bold">ShopLyft</h1>
+  const navigate = useNavigate();
+  const [choices, setChoices] = useState([]); // multiple hits to choose from
+  const [searching, setSearching] = useState(false);
 
-            {/* Search Bar */}
-            <div className="relative w-full max-w-md">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full border rounded-xl py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <SearchIcon className="absolute right-3 top-2.5 text-gray-500" />
-            </div>
+  const handleSearchToProduct = async (q) => {
+    const query = (q || '').trim();
+    if (!query) return;
 
-            {/* Navigation Links */}
-            <nav className="flex flex-col items-center gap-3">
-                <Link to="/products" className="text-blue-600 hover:underline">
-                    Products
-                </Link>
-                <Link to="/products/new" className="text-blue-600 hover:underline">
-                    Form
-                </Link>
-            </nav>
+    // numeric → treat as ID
+    if (/^\d+$/.test(query)) {
+      navigate(`/products/${query}`);
+      return;
+    }
 
-            {/* Icons Row */}
-            <div className="flex gap-6 mt-2">
-                <AccountCircleIcon className="cursor-pointer text-gray-700 hover:text-blue-500" />
-                <Link to="/cart">
-                    <ShoppingCartIcon className="cursor-pointer text-gray-700 hover:text-blue-500" />
-                </Link>
-            </div>
-        </header>
-    );
+    setSearching(true);
+    try {
+      const { data: results } = await axios.get('/api/products/search', {
+        params: { query },
+      });
+
+      // 1) exact NAME match → go directly
+      const exact = results.find(
+        (p) => p.name?.toLowerCase() === query.toLowerCase()
+      );
+      if (exact) {
+        navigate(`/products/${exact.id}`);
+        return;
+      }
+
+      // 2) only one hit → go directly
+      if (results.length === 1) {
+        navigate(`/products/${results[0].id}`);
+        return;
+      }
+
+      // 3) multiple hits → show quick picks under the bar
+      setChoices(results.slice(0, 8)); // show first few; tweak as you like
+    } catch (e) {
+      alert('Search failed. Try again.');
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  return (
+    <>
+      <AppBar position="static" component="nav" color="transparent" elevation={0}>
+        <Toolbar sx={{ display: 'flex', gap: 2 }}>
+          <Link to="/" className="">
+            ShopLyft
+          </Link>
+          <SearchBar
+            className=""
+            placeholder="Search products…"
+            onSubmitTo={handleSearchToProduct}
+          />
+          <Link to="/products" className="">
+            Products
+          </Link>
+          <Link to="/products/new" className="">
+            Form
+          </Link>
+          <div className="flex gap-6 mt-2">
+            <AccountCircleIcon className="" />
+            <Link to="/cart">
+              <ShoppingCartIcon className="" />
+            </Link>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <div className="main-container">
+        {searching && <p>Searching…</p>}
+        {!!choices.length && (
+          <div style={{ marginBottom: 16 }}>
+            <p>Multiple matches—pick one:</p>
+            <ul style={{ paddingLeft: 16 }}>
+              {choices.map((p) => (
+                <li key={p.id}>
+                  <a
+                    href={`/products/${p.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/products/${p.id}`);
+                    }}
+                  >
+                    {p.name} — {p.category}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }

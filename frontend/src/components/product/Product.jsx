@@ -1,7 +1,9 @@
+// Product.jsx
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { getProduct } from '../../api/products';
+import SearchBar from '../../components/SearchBar'; // <- import
 
 const fmt = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' });
 
@@ -18,17 +20,12 @@ export default function Product() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProduct(id),
-    enabled: !!id, // only run when id exists
+    enabled: !!id,
   });
 
-  const {
-    mutate: remove,
-    isPending: isDeleting,
-    error: deleteError,
-  } = useMutation({
+  const { mutate: remove, isPending: isDeleting, error: deleteError } = useMutation({
     mutationFn: () => deleteProduct(id),
     onSuccess: () => {
-      // refresh list and clear product cache
       qc.invalidateQueries({ queryKey: ['products'] });
       qc.removeQueries({ queryKey: ['product', id] });
       navigate('/', { replace: true });
@@ -36,9 +33,7 @@ export default function Product() {
   });
 
   function handleDelete() {
-    if (window.confirm('Delete this product permanently?')) {
-      remove();
-    }
+    if (window.confirm('Delete this product permanently?')) remove();
   }
 
   if (isLoading) return <p>Loading…</p>;
@@ -47,7 +42,6 @@ export default function Product() {
   return (
     <div>
       <Link to="/">← Back</Link>
-
       <h1>{data.name}</h1>
       <p>{data.category}</p>
       <p>{data.description}</p>
@@ -60,11 +54,7 @@ export default function Product() {
         </p>
       )}
 
-      <button
-        onClick={handleDelete}
-        disabled={isDeleting}
-        style={{ marginTop: 12, padding: '8px 12px', fontWeight: 600 }}
-      >
+      <button onClick={handleDelete} disabled={isDeleting} style={{ marginTop: 12, padding: '8px 12px', fontWeight: 600 }}>
         {isDeleting ? 'Deleting…' : 'Delete this item'}
       </button>
     </div>
