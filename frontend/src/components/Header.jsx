@@ -64,9 +64,6 @@ export default function Header() {
             placeholder="Search products…"
             onSubmitTo={handleSearchToProduct}
           />
-          <Link to="/products" className="">
-            Products
-          </Link>
           <Link to="/products/new" className="">
             Form
           </Link>

@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { getProduct } from '../../api/products';
-import SearchBar from '../../components/SearchBar'; // <- import
 
 const fmt = new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' });
 
@@ -53,6 +52,10 @@ export default function Product() {
           {deleteError?.response?.data?.message || 'Failed to delete product.'}
         </p>
       )}
+
+      <button onClick={() => navigate(`/products/${id}/edit`)} style={{ marginRight: 12 }}>
+        Edit this item
+      </button>
 
       <button onClick={handleDelete} disabled={isDeleting} style={{ marginTop: 12, padding: '8px 12px', fontWeight: 600 }}>
         {isDeleting ? 'Deleting…' : 'Delete this item'}
