@@ -1,0 +1,199 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.mompop:mom-pop-store >----------------------
+[INFO] Building mom-pop-store 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.1.0:run (default-cli) > test-compile @ mom-pop-store >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ mom-pop-store ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ mom-pop-store ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ mom-pop-store ---
+[INFO] skip non existing resourceDirectory /Users/aldebaraancanedo/Documents/VANIER/BLOCK_5/transactional_dev/final_project/GrosseryStore/backend/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ mom-pop-store ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 1 source file with javac [debug release 17] to target/test-classes
+[INFO] Annotation processing is enabled because one or more processors were found
+  on the class path. A future release of javac may disable annotation processing
+  unless at least one processor is specified by name (-processor), or a search
+  path is specified (--processor-path, --processor-module-path), or annotation
+  processing is enabled explicitly (-proc:only, -proc:full).
+  Use -Xlint:-options to suppress this message.
+  Use -proc:none to disable annotation processing.
+[INFO] 
+[INFO] <<< spring-boot:3.1.0:run (default-cli) < test-compile @ mom-pop-store <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.1.0:run (default-cli) @ mom-pop-store ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+[32m :: Spring Boot :: [39m              [2m (v3.1.0)[0;39m
+
+[2m2025-08-18T15:05:27.770-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mc.g.g.GrosseryStoreApplication          [0;39m [2m:[0;39m Starting GrosseryStoreApplication using Java 22.0.2 with PID 9025 (/Users/aldebaraancanedo/Documents/VANIER/BLOCK_5/transactional_dev/final_project/GrosseryStore/backend/target/classes started by aldebaraancanedo in /Users/aldebaraancanedo/Documents/VANIER/BLOCK_5/transactional_dev/final_project/GrosseryStore/backend)
+[2m2025-08-18T15:05:27.771-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mc.g.g.GrosseryStoreApplication          [0;39m [2m:[0;39m No active profile set, falling back to 1 default profile: "default"
+[2m2025-08-18T15:05:27.977-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36m.s.d.r.c.RepositoryConfigurationDelegate[0;39m [2m:[0;39m Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[2m2025-08-18T15:05:27.996-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36m.s.d.r.c.RepositoryConfigurationDelegate[0;39m [2m:[0;39m Finished Spring Data repository scanning in 16 ms. Found 4 JPA repository interfaces.
+[2m2025-08-18T15:05:28.178-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.s.b.w.embedded.tomcat.TomcatWebServer [0;39m [2m:[0;39m Tomcat initialized with port(s): 8080 (http)
+[2m2025-08-18T15:05:28.183-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.apache.catalina.core.StandardService  [0;39m [2m:[0;39m Starting service [Tomcat]
+[2m2025-08-18T15:05:28.183-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.apache.catalina.core.StandardEngine   [0;39m [2m:[0;39m Starting Servlet engine: [Apache Tomcat/10.1.8]
+[2m2025-08-18T15:05:28.223-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.a.c.c.C.[Tomcat].[localhost].[/]      [0;39m [2m:[0;39m Initializing Spring embedded WebApplicationContext
+[2m2025-08-18T15:05:28.223-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mw.s.c.ServletWebServerApplicationContext[0;39m [2m:[0;39m Root WebApplicationContext: initialization completed in 438 ms
+[2m2025-08-18T15:05:28.284-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.hibernate.jpa.internal.util.LogHelper [0;39m [2m:[0;39m HHH000204: Processing PersistenceUnitInfo [name: default]
+[2m2025-08-18T15:05:28.306-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.Version                   [0;39m [2m:[0;39m HHH000412: Hibernate ORM core version 6.2.2.Final
+[2m2025-08-18T15:05:28.306-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.cfg.Environment           [0;39m [2m:[0;39m HHH000406: Using bytecode reflection optimizer
+[2m2025-08-18T15:05:28.350-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.h.b.i.BytecodeProviderInitiator       [0;39m [2m:[0;39m HHH000021: Bytecode provider name : bytebuddy
+[2m2025-08-18T15:05:28.395-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.s.o.j.p.SpringPersistenceUnitInfo     [0;39m [2m:[0;39m No LoadTimeWeaver setup: ignoring JPA class transformer
+[2m2025-08-18T15:05:28.402-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Starting...
+[2m2025-08-18T15:05:28.480-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.zaxxer.hikari.pool.HikariPool       [0;39m [2m:[0;39m HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1c84d80a
+[2m2025-08-18T15:05:28.480-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Start completed.
+[2m2025-08-18T15:05:28.492-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36morg.hibernate.orm.dialect               [0;39m [2m:[0;39m HHH035001: Using dialect: org.hibernate.dialect.PostgreSQLDialect, version: org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$DialectResolutionInfoImpl@7f2b584b
+[2m2025-08-18T15:05:28.564-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.h.b.i.BytecodeProviderInitiator       [0;39m [2m:[0;39m HHH000021: Bytecode provider name : bytebuddy
+[2m2025-08-18T15:05:28.813-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.h.e.t.j.p.i.JtaPlatformInitiator      [0;39m [2m:[0;39m HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Hibernate: 
+    alter table if exists cart_items 
+       drop constraint if exists FKpcttvuq4mxppo8sxggjtn5i2c
+Hibernate: 
+    alter table if exists cart_items 
+       drop constraint if exists FK1re40cjegsfvw58xrkdp6bac6
+Hibernate: 
+    alter table if exists carts 
+       drop constraint if exists FKb5o626f86h46m4s7ms6ginnop
+Hibernate: 
+    drop table if exists cart_items cascade
+Hibernate: 
+    drop table if exists carts cascade
+Hibernate: 
+    drop table if exists products cascade
+Hibernate: 
+    drop table if exists users cascade
+Hibernate: 
+    create table cart_items (
+        quantity integer,
+        cart_id bigint,
+        id bigserial not null,
+        product_id bigint,
+        primary key (id)
+    )
+Hibernate: 
+    create table carts (
+        id bigserial not null,
+        user_id bigint unique,
+        primary key (id)
+    )
+Hibernate: 
+    create table products (
+        price numeric(38,2) not null,
+        stock_quantity integer,
+        id bigserial not null,
+        category varchar(255),
+        description varchar(255),
+        name varchar(255) not null,
+        primary key (id)
+    )
+Hibernate: 
+    create table users (
+        id bigserial not null,
+        email varchar(255),
+        password varchar(255) not null,
+        username varchar(255) not null unique,
+        primary key (id)
+    )
+Hibernate: 
+    alter table if exists cart_items 
+       add constraint FKpcttvuq4mxppo8sxggjtn5i2c 
+       foreign key (cart_id) 
+       references carts
+Hibernate: 
+    alter table if exists cart_items 
+       add constraint FK1re40cjegsfvw58xrkdp6bac6 
+       foreign key (product_id) 
+       references products
+Hibernate: 
+    alter table if exists carts 
+       add constraint FKb5o626f86h46m4s7ms6ginnop 
+       foreign key (user_id) 
+       references users
+[2m2025-08-18T15:05:28.863-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.h.t.s.i.e.GenerationTargetToDatabase  [0;39m [2m:[0;39m HHH000476: Executing script '[injected ScriptSourceInputNonExistentImpl script]'
+[2m2025-08-18T15:05:28.864-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mj.LocalContainerEntityManagerFactoryBean[0;39m [2m:[0;39m Initialized JPA EntityManagerFactory for persistence unit 'default'
+[2m2025-08-18T15:05:29.017-04:00[0;39m [33m WARN[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mJpaBaseConfiguration$JpaWebConfiguration[0;39m [2m:[0;39m spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[2m2025-08-18T15:05:29.130-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mo.s.b.w.embedded.tomcat.TomcatWebServer [0;39m [2m:[0;39m Tomcat started on port(s): 8080 (http) with context path ''
+[2m2025-08-18T15:05:29.133-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[           main][0;39m [36mc.g.g.GrosseryStoreApplication          [0;39m [2m:[0;39m Started GrosseryStoreApplication in 1.499 seconds (process running for 1.618)
+[2m2025-08-18T15:05:45.411-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[nio-8080-exec-1][0;39m [36mo.a.c.c.C.[Tomcat].[localhost].[/]      [0;39m [2m:[0;39m Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2m2025-08-18T15:05:45.412-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[nio-8080-exec-1][0;39m [36mo.s.web.servlet.DispatcherServlet       [0;39m [2m:[0;39m Initializing Servlet 'dispatcherServlet'
+[2m2025-08-18T15:05:45.412-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[nio-8080-exec-1][0;39m [36mo.s.web.servlet.DispatcherServlet       [0;39m [2m:[0;39m Completed initialization in 0 ms
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category,
+        p1_0.description,
+        p1_0.name,
+        p1_0.price,
+        p1_0.stock_quantity 
+    from
+        products p1_0
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category,
+        p1_0.description,
+        p1_0.name,
+        p1_0.price,
+        p1_0.stock_quantity 
+    from
+        products p1_0
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category,
+        p1_0.description,
+        p1_0.name,
+        p1_0.price,
+        p1_0.stock_quantity 
+    from
+        products p1_0
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category,
+        p1_0.description,
+        p1_0.name,
+        p1_0.price,
+        p1_0.stock_quantity 
+    from
+        products p1_0 
+    where
+        p1_0.id=?
+[2m2025-08-18T15:08:32.893-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[ionShutdownHook][0;39m [36mj.LocalContainerEntityManagerFactoryBean[0;39m [2m:[0;39m Closing JPA EntityManagerFactory for persistence unit 'default'
+[2m2025-08-18T15:08:32.894-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[ionShutdownHook][0;39m [36m.SchemaDropperImpl$DelayedDropActionImpl[0;39m [2m:[0;39m HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+Hibernate: 
+    alter table if exists cart_items 
+       drop constraint if exists FKpcttvuq4mxppo8sxggjtn5i2c
+Hibernate: 
+    alter table if exists cart_items 
+       drop constraint if exists FK1re40cjegsfvw58xrkdp6bac6
+Hibernate: 
+    alter table if exists carts 
+       drop constraint if exists FKb5o626f86h46m4s7ms6ginnop
+Hibernate: 
+    drop table if exists cart_items cascade
+Hibernate: 
+    drop table if exists carts cascade
+Hibernate: 
+    drop table if exists products cascade
+Hibernate: 
+    drop table if exists users cascade
+[2m2025-08-18T15:08:32.993-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[ionShutdownHook][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Shutdown initiated...
+[2m2025-08-18T15:08:32.995-04:00[0;39m [32m INFO[0;39m [35m9025[0;39m [2m---[0;39m [2m[ionShutdownHook][0;39m [36mcom.zaxxer.hikari.HikariDataSource      [0;39m [2m:[0;39m HikariPool-1 - Shutdown completed.

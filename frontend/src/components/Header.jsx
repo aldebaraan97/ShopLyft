@@ -6,11 +6,20 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SearchBar from './SearchBar.jsx';
 import { useState } from 'react';
 import axios from 'axios';
+import { logout } from '../api/auth.js';
 
-export default function Header() {
+export default function Header({ user, onLogout }) {
   const navigate = useNavigate();
   const [choices, setChoices] = useState([]); // multiple hits to choose from
   const [searching, setSearching] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    if (onLogout) {
+      onLogout();
+    }
+    navigate('/');
+  };
 
   const handleSearchToProduct = async (q) => {
     const query = (q || '').trim();
@@ -24,7 +33,7 @@ export default function Header() {
 
     setSearching(true);
     try {
-      const { data: results } = await axios.get('/api/products/search', {
+      const { data: results } = await axios.get('http://localhost:8080/api/products/search', {
         params: { query },
       });
 
@@ -68,10 +77,24 @@ export default function Header() {
             Form
           </Link>
           <div className="flex gap-6 mt-2">
-            <AccountCircleIcon className="" />
-            <Link to="/cart">
-              <ShoppingCartIcon className="" />
-            </Link>
+            {user ? (
+              <>
+                <span>Welcome, {user.username}</span>
+                <Button onClick={handleLogout}>Logout</Button>
+                <Link to="/cart">
+                  <ShoppingCartIcon className="" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button>Login</Button>
+                </Link>
+                <Link to="/register">
+                  <Button>Register</Button>
+                </Link>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>

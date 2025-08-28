@@ -5,6 +5,7 @@ import com.grosserystore.grosserystore.entity.User;
 import com.grosserystore.grosserystore.repository.CartRepository;
 import com.grosserystore.grosserystore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +17,14 @@ public class UserService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Transactional
     public User createUser(String username, String password, String email) {
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setEmail(email);
 
         user = userRepository.save(user);
@@ -36,12 +40,16 @@ public class UserService {
 
     public User login(String username, String password) {
         return userRepository.findByUsername(username)
-                .filter(user -> user.getPassword().equals(password))
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElse(null);
     }
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 
     @Transactional
