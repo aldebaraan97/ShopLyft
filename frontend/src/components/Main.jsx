@@ -7,9 +7,6 @@ export default function Main() {
     <>
       <div className="main-container">
         <ProductList />
-        <Link to="/products">Browse Products</Link>
-        <br />
-        <Link to="/products/new">Add New Product</Link>
       </div>
     </>
   );

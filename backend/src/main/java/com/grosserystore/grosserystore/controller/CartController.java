@@ -1,68 +1,69 @@
 package com.grosserystore.grosserystore.controller;
 
 import com.grosserystore.grosserystore.dto.CartItemRequest;
+import com.grosserystore.grosserystore.dto.QuantityRequest;
 import com.grosserystore.grosserystore.entity.Cart;
 import com.grosserystore.grosserystore.service.CartService;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/cart")
 @Tag(name = "Carts", description = "Cart management APIs")
 @CrossOrigin(origins = "http://localhost:3000")
+@Validated
 public class CartController {
 
-    @Autowired
-    private CartService cartService;
+    private final CartService cartService;
+
+    public CartController(CartService cartService) {
+        this.cartService = cartService;
+    }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long userId) {
+    public ResponseEntity<Cart> getCart(@PathVariable @Positive Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
-        if (cart != null) {
-            return ResponseEntity.ok(cart);
-        }
-        return ResponseEntity.notFound().build();
+        return (cart != null) ? ResponseEntity.ok(cart) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{userId}/items")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Cart> addItem(
-            @PathVariable Long userId,
-            @RequestBody CartItemRequest request) {
+            @PathVariable @Positive Long userId,
+            @Valid @RequestBody CartItemRequest request) {
         Cart cart = cartService.addItemToCart(userId, request.getProductId(), request.getQuantity());
-        if (cart != null) {
-            return ResponseEntity.ok(cart);
+        if (cart == null) {
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.created(URI.create("/api/cart/" + userId)).body(cart);
     }
 
+    // ✅ Single update endpoint: body only needs quantity
     @PutMapping("/{userId}/items/{productId}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Cart> updateItem(
-            @PathVariable Long userId,
-            @PathVariable Long productId,
-            @RequestBody CartItemRequest request) {
+            @PathVariable @Positive Long userId,
+            @PathVariable @Positive Long productId,
+            @Valid @RequestBody QuantityRequest request) {
         Cart cart = cartService.updateItemQuantity(userId, productId, request.getQuantity());
-        if (cart != null) {
-            return ResponseEntity.ok(cart);
-        }
-        return ResponseEntity.notFound().build();
+        return (cart != null) ? ResponseEntity.ok(cart) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{userId}/items/{productId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Cart> removeItem(
-            @PathVariable Long userId,
-            @PathVariable Long productId) {
+    public ResponseEntity<Void> removeItem(
+            @PathVariable @Positive Long userId,
+            @PathVariable @Positive Long productId) {
         Cart cart = cartService.removeItemFromCart(userId, productId);
-        if (cart != null) {
-            return ResponseEntity.ok(cart);
-        }
-        return ResponseEntity.notFound().build();
+        return (cart != null) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> clearCart(@PathVariable @Positive Long userId) {
+        cartService.clearCart(userId);
+        return ResponseEntity.noContent().build();
     }
 }

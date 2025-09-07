@@ -1,16 +1,45 @@
 import { useState } from "react";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  MenuItem,
+  TextField,
+} from "@mui/material";
+
+const API_BASE_URL = "http://localhost:8080/api";
 
 async function createProduct(payload) {
-  const res = await axios.post("/api/products", payload, {
+  const res = await axios.post(`${API_BASE_URL}/products`, payload, {
     headers: { "Content-Type": "application/json" },
   });
   return res.data;
 }
 
+const CATEGORIES = [
+  "Grains",
+  "Fruits",
+  "Vegetables",
+  "Dairy",
+  "Meat",
+  "Beverages",
+  "Snacks",
+  "Condiments",
+  "Frozen",
+  "Bakery",
+];
+
 export default function ProductForm() {
-  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const qc = useQueryClient();
 
   const [form, setForm] = useState({
     name: "",
@@ -19,28 +48,21 @@ export default function ProductForm() {
     stockQuantity: "",
     category: "Grains",
   });
-
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
 
-  const { mutate, isPending, isSuccess } = useMutation({
-    mutationFn: createProduct,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      setForm({
-        name: "",
-        description: "",
-        price: "",
-        stockQuantity: "",
-        category: "Grains",
-      });
+  const { mutate, isPending, isSuccess, data: created } = useMutation({
+    mutationFn: (payload) => createProduct(payload),
+    onSuccess: (product) => {
+      // refresh product lists and optionally jump to the new item
+      qc.invalidateQueries({ queryKey: ["products"] });
       setServerError("");
+      // navigate to the detail page (comment out if you prefer to stay)
+      navigate(`/products/${product.id}`);
     },
     onError: (err) => {
       setServerError(
-        err?.response?.data?.message ||
-        err?.message ||
-        "Failed to create product."
+        err?.response?.data?.message || err?.message || "Failed to create product."
       );
     },
   });
@@ -53,143 +75,150 @@ export default function ProductForm() {
   function validate() {
     const e = {};
     if (!form.name.trim()) e.name = "Name is required";
-    if (!form.price) e.price = "Price is required";
-    if (Number.isNaN(parseFloat(form.price))) e.price = "Price must be a number";
-    if (!form.stockQuantity && form.stockQuantity !== 0)
-      e.stockQuantity = "Stock quantity is required";
-    if (!Number.isInteger(Number(form.stockQuantity)))
-      e.stockQuantity = "Stock must be an integer";
-    return e;
+
+    const priceNum = parseFloat(form.price);
+    if (form.price === "" || Number.isNaN(priceNum) || priceNum < 0)
+      e.price = "Price must be a number ≥ 0";
+
+    const stockNum = Number(form.stockQuantity);
+    if (form.stockQuantity === "" || !Number.isInteger(stockNum) || stockNum < 0)
+      e.stockQuantity = "Stock quantity must be an integer ≥ 0";
+
+    setErrors(e);
+    return Object.keys(e).length === 0;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    const eventObj = validate();
-    setErrors(eventObj);
-    if (Object.keys(eventObj).length) return;
+    if (!validate()) return;
 
-    const payload = {
+    mutate({
       name: form.name.trim(),
-      description: form.description.trim(),
-      price: parseFloat(form.price),
-      stockQuantity: parseInt(form.stockQuantity, 10),
+      description: (form.description || "").trim(),
+      price: Number(form.price),
+      stockQuantity: Number(form.stockQuantity),
       category: form.category,
-    };
-    mutate(payload);
+    });
   }
 
   return (
-    <div style={{ maxWidth: 560, margin: "0 auto", padding: 16 }}>
-      <h2 style={{ fontSize: 24, marginBottom: 12 }}>Create Product</h2>
+    <Card
+      variant="outlined"
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ borderRadius: 2, maxWidth: 940, mx: "auto", mt: 2 }}
+    >
+      <CardHeader
+        title="Create Product"
+        subheader="Add a new product to the catalog"
+        sx={{ pb: 0, "& .MuiCardHeader-title": { fontWeight: 700 } }}
+      />
 
-      <form onSubmit={handleSubmit} noValidate>
-        <div style={{ marginBottom: 12 }}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Enter product name"
-              style={{ display: "block", width: "100%", padding: 8, marginTop: 6 }}
-            />
-          </label>
-          {errors.name && <small style={{ color: "crimson" }}>{errors.name}</small>}
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>
-            Description
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Enter product description"
-              rows={3}
-              style={{ display: "block", width: "100%", padding: 8, marginTop: 6 }}
-            />
-          </label>
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>
-            Price
-            <input
-              type="number"
-              name="price"
-              value={form.price}
-              onChange={handleChange}
-              placeholder="1.50"
-              step="0.01"
-              min="0"
-              style={{ display: "block", width: "100%", padding: 8, marginTop: 6 }}
-            />
-          </label>
-          {errors.price && <small style={{ color: "crimson" }}>{errors.price}</small>}
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>
-            Stock Quantity
-            <input
-              type="number"
-              name="stockQuantity"
-              value={form.stockQuantity}
-              onChange={handleChange}
-              placeholder="1000"
-              step="1"
-              min="0"
-              style={{ display: "block", width: "100%", padding: 8, marginTop: 6 }}
-            />
-          </label>
-          {errors.stockQuantity && (
-            <small style={{ color: "crimson" }}>{errors.stockQuantity}</small>
+      <CardContent>
+        <Box sx={{ display: "grid", gap: 2 }}>
+          {serverError && <Alert severity="error">{serverError}</Alert>}
+          {isSuccess && created && (
+            <Alert severity="success">Product created successfully!</Alert>
           )}
-        </div>
 
-        <div style={{ marginBottom: 16 }}>
-          <label>
-            Category
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              style={{ display: "block", width: "100%", padding: 8, marginTop: 6 }}
-            >
-              <option>Grains</option>
-              <option>Fruits</option>
-              <option>Meat</option>
-              <option>Seafood</option>
-              <option>Vegetables</option>
-              <option>Beverages</option>
-              <option>Frozen</option>
-            </select>
-          </label>
-        </div>
+          {/* Row 1: uniform inputs */}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                label="Name"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                error={!!errors.name}
+                helperText={errors.name}
+                fullWidth
+                size="medium"
+                required
+              />
+            </Grid>
 
-        {serverError && (
-          <div style={{ color: "crimson", marginBottom: 12 }}>{serverError}</div>
-        )}
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                label="Category"
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                select
+                fullWidth
+                size="medium"
+              >
+                {CATEGORIES.map((c) => (
+                  <MenuItem key={c} value={c}>
+                    {c}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
-        {isSuccess && (
-          <div style={{ color: "seagreen", marginBottom: 12 }}>
-            Product created successfully.
-          </div>
-        )}
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                label="Price (CAD)"
+                name="price"
+                type="number"
+                value={form.price}
+                onChange={handleChange}
+                inputProps={{ step: "0.01", min: 0 }}
+                error={!!errors.price}
+                helperText={errors.price}
+                fullWidth
+                size="medium"
+                required
+              />
+            </Grid>
 
-        <button
+            <Grid item xs={12} sm={6} md={3}>
+              <TextField
+                label="Stock Quantity"
+                name="stockQuantity"
+                type="number"
+                value={form.stockQuantity}
+                onChange={handleChange}
+                inputProps={{ step: "1", min: 0 }}
+                error={!!errors.stockQuantity}
+                helperText={errors.stockQuantity}
+                fullWidth
+                size="medium"
+                required
+              />
+            </Grid>
+          </Grid>
+
+          {/* Row 2: description full width */}
+          <TextField
+            label="Description"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            fullWidth
+            multiline
+            minRows={4}
+            size="medium"
+            placeholder="Enter product description"
+          />
+
+          <Box>
+            <Box component="span" sx={{ color: "text.secondary", fontSize: 12 }}>
+              * All fields marked as required must be filled.
+            </Box>
+          </Box>
+        </Box>
+      </CardContent>
+
+      <CardActions sx={{ px: 3, pb: 3 }}>
+        <Button
           type="submit"
+          variant="contained"
           disabled={isPending}
-          style={{
-            padding: "10px 16px",
-            fontWeight: 600,
-            cursor: isPending ? "not-allowed" : "pointer",
-          }}
+          sx={{ textTransform: "none" }}
         >
-          {isPending ? "Saving…" : "Create Product"}
-        </button>
-      </form>
-    </div>
+          {isPending ? "Creating…" : "Create Product"}
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

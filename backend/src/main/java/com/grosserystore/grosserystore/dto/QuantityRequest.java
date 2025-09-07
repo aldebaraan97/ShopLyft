@@ -1,7 +1,7 @@
 package com.grosserystore.grosserystore.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,13 +9,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CartItemRequest {
+public class QuantityRequest {
 
+    // 0 means "remove item"
     @NotNull
-    @Positive
-    private Long productId;
-
-    @NotNull
-    @Positive
+    @Min(0)
     private Integer quantity;
 }

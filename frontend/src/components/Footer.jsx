@@ -1,15 +1,47 @@
-import HomeIcon from '@mui/icons-material/Home';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
+import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export default function Footer() {
-    return (
-        <footer className="w-full bg-gray-100 shadow-inner p-4 flex flex-col items-center gap-2 mt-8">
-            <div className="flex gap-4">
-                <HomeIcon className="text-gray-700 hover:text-blue-500 cursor-pointer" />
-                <ContactMailIcon className="text-gray-700 hover:text-blue-500 cursor-pointer" />
-            </div>
-            <p className="text-gray-700 text-sm">&copy; {new Date().getFullYear()} ShopLyft. All rights reserved.</p>
-            <p className="text-gray-500 text-xs">Powered by React & Spring Boot</p>
-        </footer>
-    );
+  return (
+    <Box
+      component="footer"
+      sx={{
+        mt: 6,
+        // soft tinted background for contrast with the page
+        bgcolor: "grey.100",
+        borderTop: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 2.5,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+          flexWrap: "wrap",
+        }}
+      >
+        <Stack direction="row" spacing={1}>
+          <IconButton size="small" color="default" aria-label="home" href="/">
+            <HomeIcon />
+          </IconButton>
+        </Stack>
+
+        <Typography variant="body2" color="text.secondary">
+          © {new Date().getFullYear()} <strong>ShopLyft</strong>. All rights reserved.
+        </Typography>
+
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2" color="text.secondary">
+            Powered by React &amp; Spring Boot
+          </Typography>
+          <FavoriteBorderIcon fontSize="small" sx={{ color: "text.disabled" }} />
+        </Stack>
+      </Container>
+    </Box>
+  );
 }
