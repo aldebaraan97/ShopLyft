@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain) throws ServletException, IOException {
 
-        // ✅ Let CORS preflight pass immediately
+        // ✅ Always let CORS preflight go through
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
@@ -37,13 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // ✅ Skip auth for public routes
-        if (path.startsWith("/api/auth/")
-                || path.startsWith("/api/products/")
-                || path.startsWith("/v3/api-docs/")
-                || path.startsWith("/swagger-ui/")
-                // Dev: cart endpoints are open
-                || path.startsWith("/api/cart/")) {
+        if (isPublic(path)) {
             chain.doFilter(request, response);
             return;
         }
@@ -57,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (Exception e) {
-                logger.error("Unable to parse JWT", e);
+                logger.debug("Unable to parse JWT", e);
             }
         }
 
@@ -74,5 +68,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isPublic(String path) {
+        if (path == null) {
+            return true;
+        }
+
+        if (path.startsWith("/api/auth/")
+                || path.startsWith("/v3/api-docs/")
+                || path.startsWith("/swagger-ui/")
+                || path.equals("/swagger-ui.html")) {
+            return true;
+        }
+
+        if (path.equals("/api/products") || path.startsWith("/api/products/")) {
+            return true;
+        }
+
+        if (path.startsWith("/api/cart/")) {
+            return true;
+        }
+
+        if (path.startsWith("/api/checkout/") || path.equals("/api/webhooks/stripe") || path.startsWith("/api/webhooks/stripe/")) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -1,7 +1,6 @@
-import { http } from "./http";
+import { httpNoAuth } from "./http";
 
 export async function createCheckoutSession(userId) {
-	const { data } = await http.post(`/checkout/${userId}/create-session`);
-	// data = { url: "https://checkout.stripe.com/..." }
+	const { data } = await httpNoAuth.post(`/checkout/${userId}/create-session`);
 	return data;
 }
