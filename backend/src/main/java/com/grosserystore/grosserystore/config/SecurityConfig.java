@@ -54,21 +54,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // CSRF disabled for stateless JWT APIs
                 .csrf(csrf -> csrf.disable())
+                // CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Stateless sessions
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 401 handler
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(
-                (req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
+                (req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
+        ))
+                // Route rules
                 .authorizeHttpRequests(auth -> auth
-                // ✅ Always allow CORS preflight
+                // Always allow preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // Public endpoints
+                .requestMatchers("/api/webhooks/stripe").permitAll() // Stripe webhook must be public
+                .requestMatchers("/api/checkout/**").permitAll() // allow during dev; lock down later if needed
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/products/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                // ✅ Dev: open cart endpoints so your frontend can call PUT/DELETE without a token
-                .requestMatchers("/api/cart/**").permitAll()
-                // Everything else requires auth
+                .requestMatchers("/api/cart/**").permitAll() // dev convenience
+
+                // Everything else requires auth (JWT)
                 .anyRequest().authenticated()
                 );
 
@@ -81,7 +89,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        // IMPORTANT: when allowCredentials=true, do NOT use "*"; list the exact origin(s)
+        // IMPORTANT: when allowCredentials=true, list explicit origins (not "*")
         cfg.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         cfg.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));

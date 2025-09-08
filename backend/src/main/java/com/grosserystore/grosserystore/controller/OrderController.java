@@ -1,5 +1,8 @@
 package com.grosserystore.grosserystore.controller;
 
+import com.grosserystore.grosserystore.dto.OrderDetailDto;
+import com.grosserystore.grosserystore.dto.OrderItemDto;
+import com.grosserystore.grosserystore.dto.OrderSummaryDto;
 import com.grosserystore.grosserystore.entity.Order;
 import com.grosserystore.grosserystore.service.OrderService;
 
@@ -34,13 +37,37 @@ public class OrderController {
         return orderService.getOrdersByUserId(userId);
     }
 
+    // @GetMapping("/order/{orderId}")
+    // public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
+    //     Order order = orderService.getOrderById(orderId);
+    //     if (order != null) {
+    //         return ResponseEntity.ok(order);
+    //     }
+    //     return ResponseEntity.notFound().build();
+    // }
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
-        Order order = orderService.getOrderById(orderId);
-        if (order != null) {
-            return ResponseEntity.ok(order);
+    public ResponseEntity<OrderDetailDto> getOrderById(@PathVariable Long orderId) {
+        Order o = orderService.getOrderWithItems(orderId);
+        if (o == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+
+        var items = o.getOrderItems().stream().map(oi
+                -> new OrderItemDto(
+                        oi.getId(),
+                        oi.getProduct().getName(),
+                        oi.getQuantity(),
+                        oi.getPrice(),
+                        oi.getPrice().multiply(java.math.BigDecimal.valueOf(oi.getQuantity()))
+                )
+        ).toList();
+
+        return ResponseEntity.ok(new OrderDetailDto(
+                o.getId(),
+                o.getStatus() != null ? o.getStatus().name() : "PENDING",
+                o.getTotalAmount(),
+                items
+        ));
     }
 
     @PutMapping("/{orderId}/status")

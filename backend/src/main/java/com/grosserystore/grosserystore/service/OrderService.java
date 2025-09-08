@@ -14,12 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
+
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private CartService cartService;
 
@@ -59,7 +60,7 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
         cartService.clearCart(userId);
-        
+
         return savedOrder;
     }
 
@@ -78,5 +79,9 @@ public class OrderService {
             return orderRepository.save(order);
         }
         return null;
+    }
+
+    public Order getOrderWithItems(Long orderId) {
+        return orderRepository.findByIdFetchItems(orderId).orElse(null);
     }
 }
