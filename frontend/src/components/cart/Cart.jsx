@@ -4,6 +4,7 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCart, updateItem, removeItem, clearCart } from "../../api/cart";
 import { getCurrentUser, isAuthenticated } from "../../api/auth";
+import { createCheckoutSession } from "../../api/checkout";
 
 import {
   Box,
@@ -31,6 +32,12 @@ export default function Cart() {
 
   const authed = isAuthenticated();
   const userId = authed ? getCurrentUser().userId : null;
+
+  const checkout = useMutation({
+    mutationFn: () => createCheckoutSession(userId),
+    onSuccess: ({ url }) => { window.location.href = url; },
+    onError: (err) => alert(err?.response?.data || "Failed to start checkout"),
+  });
 
   // redirect happens in an effect (keeps hooks stable)
   useEffect(() => {
@@ -234,8 +241,12 @@ export default function Cart() {
               >
                 CLEAR CART
               </Button>
-              <Button variant="contained" disabled>
-                CHECKOUT (STUB)
+              <Button
+                variant="contained"
+                disabled={!items.length || checkout.isPending}
+                onClick={() => checkout.mutate()}
+              >
+                {checkout.isPending ? "Redirecting…" : "Checkout"}
               </Button>
             </Stack>
           </Stack>

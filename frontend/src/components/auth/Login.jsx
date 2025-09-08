@@ -28,23 +28,23 @@ const Login = ({ onLoginSuccess }) => {
 
         try {
             const response = await login(formData.username, formData.password);
-            console.log('Login successful:', response);
-            
+            // console.log('Login successful:', response);
+
             // Show success message
             setSuccess('Login successful! Redirecting...');
-            
+
             // Call parent success handler
             if (onLoginSuccess) {
                 onLoginSuccess(response);
             }
-            
+
             // Redirect to main page after a short delay
             setTimeout(() => {
                 navigate('/');
             }, 1500);
-            
+
         } catch (error) {
-            console.error('Login error:', error);
+            // console.error('Login error:', error);
             if (error.response && error.response.data) {
                 setError(error.response.data);
             } else {
@@ -84,8 +84,8 @@ const Login = ({ onLoginSuccess }) => {
                             required
                         />
                     </div>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="login-btn"
                         disabled={isLoading}
                     >

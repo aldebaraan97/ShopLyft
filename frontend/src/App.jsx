@@ -9,8 +9,10 @@ import ProductForm from './components/product/ProductForm.jsx';
 import ProductEdit from './components/product/ProductEdit.jsx';
 import Login from './components/auth/Login.jsx';
 import Register from './components/auth/Register.jsx';
-import Cart from './components/cart/Cart.jsx';          // <-- add
+import Cart from './components/cart/Cart.jsx';
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 import { isAuthenticated } from './api/auth.js';
+import Orders from "./pages/Orders.jsx";
 import './App.css';
 
 export default function App() {
@@ -42,6 +44,8 @@ export default function App() {
           <Route path="login" element={<Login onLoginSuccess={handleLoginSuccess} />} />
           <Route path="register" element={<Register />} />
           <Route path="*" element={<div>Not found</div>} />
+          <Route path="/checkout/success" element={<CheckoutSuccess />} />
+          <Route path="/orders" element={<Orders />} />
         </Route>
       </Routes>
     </BrowserRouter>
