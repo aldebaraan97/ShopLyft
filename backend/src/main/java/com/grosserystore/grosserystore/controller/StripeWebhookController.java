@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StripeWebhookController {
 
-    private final FulfillmentService fulfillmentService = null;
+    private final FulfillmentService fulfillmentService;
 
     @Value("${stripe.webhookSecret}")
     private String endpointSecret;
